@@ -1,0 +1,26 @@
+# Ignore large model weights
+*.pt
+*.weights
+
+# Ignore video & dataset files
+*.mp4
+*.avi
+*.mov
+*.zip
+*.npy
+*.npz
+*.pkl
+
+# Ignore Python cache folders
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore YOLO outputs and temporary folders
+runs/
+uploads/
+dataset/
