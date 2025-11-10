@@ -5,9 +5,9 @@ import numpy as np
 import time
 from collections import defaultdict
 
-st.set_page_config(page_title="Human + Animal Counter", layout="wide")
+st.set_page_config(page_title="ENTITY PLUS", layout="wide")
 
-# ---------- IOU ----------
+#IOU
 def iou(boxA, boxB):
     xA = max(boxA[0], boxB[0])
     yA = max(boxA[1], boxB[1])
@@ -19,7 +19,7 @@ def iou(boxA, boxB):
     union = areaA + areaB - inter
     return inter / union if union > 0 else 0
 
-# ---------- Simple Tracker ----------
+#Simple Tracker
 class SimpleTracker:
     def __init__(self, iou_threshold=0.5, max_lost=10):
         self.iou_threshold = iou_threshold
@@ -62,7 +62,7 @@ class SimpleTracker:
 
         return dict(self.tracks)
 
-# ---------- Sidebar ----------
+#Sidebar
 st.sidebar.title("Settings")
 model_size = st.sidebar.selectbox("YOLO model", ["yolov8n.pt", "yolov8s.pt"], index=0)
 conf_thres = st.sidebar.slider("Confidence threshold", 0.3, 0.9, 0.7)
@@ -71,12 +71,12 @@ source_type = st.sidebar.selectbox("Source", ["Upload image", "Upload video", "W
 fps_limit = st.sidebar.slider("Process FPS", 1, 30, 6)
 mode = st.sidebar.radio("Detection Mode", ["Humans only", "Humans + Animals"])
 
-# ---------- Clear Button ----------
-if st.sidebar.button("🧹 Clear Screen"):
+#Clear Button
+if st.sidebar.button("Cls"):
     st.cache_resource.clear()
     st.experimental_rerun()
 
-# ---------- Model Loading ----------
+#Model Loading
 @st.cache_resource
 def load_model(path, device):
     model = YOLO(path)
@@ -87,21 +87,21 @@ def load_model(path, device):
 device = "cuda" if use_gpu else "cpu"
 model = load_model(model_size, device)
 
-# ---------- Target Classes ----------
+#Target Classes
 ANIMAL_CLASSES = {"dog", "cat", "cow", "horse", "sheep", "elephant", "bird", "goat"}
 if mode == "Humans only":
     TARGET_CLASSES = {"person"}
 else:
     TARGET_CLASSES = {"person"} | ANIMAL_CLASSES
 
-st.title("The Entity Plus 🧍‍♂️🐶🐄")
+st.title("The Entity Plus")
 st.markdown("Detects and counts humans and animals using YOLOv8.")
 
-# ---------- Streamlit placeholders ----------
+#Streamlit placeholders
 placeholder = st.empty()
 stats_placeholder = st.sidebar.empty()
 
-# ---------- Uploading / Capturing ----------
+#Uploading / Capturing
 if source_type == "Upload image":
     image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     if image_file:
@@ -214,4 +214,4 @@ elif source_type in ["Upload video", "Webcam (0)"]:
                 stats_placeholder.markdown("_No detections yet_")
 
         cap.release()
-        st.sidebar.success("Processing finished.")
+        st.sidebar.success("Processing finished")
